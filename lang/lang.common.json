@@ -1,7 +1,7 @@
 {
     "bot": {
-        "name": "My Bot",
-        "author": "My Name"
+        "name": "Abu",
+        "author": "lucidaumoi"
     },
     "emojis": {
         "yes": "✅",
@@ -23,15 +23,15 @@
         "error": "#ff4a4a"
     },
     "links": {
-        "author": "https://github.com/",
+        "author": "https://github.com/lucidaumoi",
         "docs": "https://top.gg/",
-        "donate": "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=EW389DYYSS4FC",
+        "donate": "",
         "invite": "https://discord.com/",
         "source": "https://github.com/",
-        "stream": "https://www.twitch.tv/novakevin",
+        "stream": "",
         "support": "https://support.discord.com/",
-        "template": "https://github.com/KevinNovak/Discord-Bot-TypeScript-Template",
-        "terms": "https://github.com/KevinNovak/Discord-Bot-TypeScript-Template/blob/master/LEGAL.md#terms-of-service",
+        "template": "",
+        "terms": "",
         "vote": "https://top.gg/"
     }
 }

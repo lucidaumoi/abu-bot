@@ -3,7 +3,14 @@ import { Options, Partials } from 'discord.js';
 import { createRequire } from 'node:module';
 
 import { Button } from './buttons/index.js';
-import { DevCommand, HelpCommand, InfoCommand, TestCommand } from './commands/chat/index.js';
+import {
+    AvatarCommand,
+    DevCommand,
+    HelpCommand,
+    InfoCommand,
+    TestCommand,
+} from './commands/chat/index.js';
+import { CountdownCommand } from './commands/chat/index.js';
 import {
     ChatCommandMetadata,
     Command,
@@ -28,10 +35,11 @@ import { Reaction } from './reactions/index.js';
 import {
     CommandRegistrationService,
     EventDataService,
+    GeminiChatService,
     JobService,
     Logger,
 } from './services/index.js';
-import { Trigger } from './triggers/index.js';
+import { GeminiChatTrigger, Trigger } from './triggers/index.js';
 
 const require = createRequire(import.meta.url);
 let Config = require('../config/config.json');
@@ -57,10 +65,12 @@ async function start(): Promise<void> {
     // Commands
     let commands: Command[] = [
         // Chat Commands
+        new AvatarCommand(),
         new DevCommand(),
         new HelpCommand(),
         new InfoCommand(),
         new TestCommand(),
+        new CountdownCommand(),
 
         // Message Context Commands
         new ViewDateSent(),
@@ -83,7 +93,12 @@ async function start(): Promise<void> {
 
     // Triggers
     let triggers: Trigger[] = [
-        // TODO: Add new triggers here
+        new GeminiChatTrigger(
+            new GeminiChatService(
+                Config.gemini?.apiKey ?? process.env.GEMINI_API_KEY,
+                Config.gemini?.model ?? 'gemini-2.5-flash'
+            )
+        ),
     ];
 
     // Event handlers

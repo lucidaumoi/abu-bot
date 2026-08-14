@@ -21,8 +21,18 @@ export class CommandRegistrationService {
         localCmds: RESTPostAPIApplicationCommandsJSONBody[],
         args: string[]
     ): Promise<void> {
+        const isGuild =
+            args[3] === 'register-guild' ||
+            args[3] === 'view-guild' ||
+            args[3] === 'delete-guild' ||
+            args[3] === 'clear-guild';
+        const guildId = args[4];
+        const commandsRoute = isGuild
+            ? Routes.applicationGuildCommands(Config.client.id, guildId)
+            : Routes.applicationCommands(Config.client.id);
+
         let remoteCmds = (await this.rest.get(
-            Routes.applicationCommands(Config.client.id)
+            commandsRoute
         )) as RESTGetAPIApplicationCommandsResult;
 
         let localCmdsOnRemote = localCmds.filter(localCmd =>
@@ -48,7 +58,12 @@ export class CommandRegistrationService {
                 );
                 return;
             }
-            case 'register': {
+            case 'register':
+            case 'register-guild': {
+                if (!isGuild && args[3] === 'register-guild') {
+                    Logger.error(Logs.error.commandActionMissingGuild);
+                    return;
+                }
                 if (localCmdsOnly.length > 0) {
                     Logger.info(
                         Logs.info.commandActionCreating.replaceAll(
@@ -57,7 +72,7 @@ export class CommandRegistrationService {
                         )
                     );
                     for (let localCmd of localCmdsOnly) {
-                        await this.rest.post(Routes.applicationCommands(Config.client.id), {
+                        await this.rest.post(commandsRoute, {
                             body: localCmd,
                         });
                     }
@@ -72,7 +87,7 @@ export class CommandRegistrationService {
                         )
                     );
                     for (let localCmd of localCmdsOnRemote) {
-                        await this.rest.post(Routes.applicationCommands(Config.client.id), {
+                        await this.rest.post(commandsRoute, {
                             body: localCmd,
                         });
                     }
@@ -105,9 +120,10 @@ export class CommandRegistrationService {
                 let body: RESTPatchAPIApplicationCommandJSONBody = {
                     name: newName,
                 };
-                await this.rest.patch(Routes.applicationCommand(Config.client.id, remoteCmd.id), {
-                    body,
-                });
+                const patchRoute = isGuild
+                    ? Routes.applicationCommand(Config.client.id, remoteCmd.id)
+                    : Routes.applicationCommand(Config.client.id, remoteCmd.id);
+                await this.rest.patch(patchRoute, { body });
                 Logger.info(Logs.info.commandActionRenamed);
                 return;
             }
@@ -125,11 +141,13 @@ export class CommandRegistrationService {
                     );
                     return;
                 }
-
                 Logger.info(
                     Logs.info.commandActionDeleting.replaceAll('{COMMAND_NAME}', remoteCmd.name)
                 );
-                await this.rest.delete(Routes.applicationCommand(Config.client.id, remoteCmd.id));
+                const deleteRoute = isGuild
+                    ? Routes.applicationCommand(Config.client.id, remoteCmd.id)
+                    : Routes.applicationCommand(Config.client.id, remoteCmd.id);
+                await this.rest.delete(deleteRoute);
                 Logger.info(Logs.info.commandActionDeleted);
                 return;
             }
@@ -140,7 +158,22 @@ export class CommandRegistrationService {
                         this.formatCommandList(remoteCmds)
                     )
                 );
-                await this.rest.put(Routes.applicationCommands(Config.client.id), { body: [] });
+                await this.rest.put(commandsRoute, { body: [] });
+                Logger.info(Logs.info.commandActionCleared);
+                return;
+            }
+            case 'clear-guild': {
+                if (!isGuild) {
+                    Logger.error(Logs.error.commandActionMissingGuild);
+                    return;
+                }
+                Logger.info(
+                    Logs.info.commandActionClearing.replaceAll(
+                        '{COMMAND_LIST}',
+                        this.formatCommandList(remoteCmds)
+                    )
+                );
+                await this.rest.put(commandsRoute, { body: [] });
                 Logger.info(Logs.info.commandActionCleared);
                 return;
             }

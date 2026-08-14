@@ -1,4 +1,5 @@
 import {
+    ApplicationCommandOptionType,
     ApplicationCommandType,
     PermissionFlagsBits,
     PermissionsBitField,
@@ -13,6 +14,25 @@ import { Lang } from '../services/index.js';
 export const ChatCommandMetadata: {
     [command: string]: RESTPostAPIChatInputApplicationCommandsJSONBody;
 } = {
+    AVATAR: {
+        type: ApplicationCommandType.ChatInput,
+        name: Lang.getRef('chatCommands.avatar', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('chatCommands.avatar'),
+        description: Lang.getRef('commandDescs.avatar', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commandDescs.avatar'),
+        dm_permission: true,
+        default_member_permissions: undefined,
+        options: [
+            {
+                name: Lang.getRef('arguments.user', Language.Default),
+                name_localizations: Lang.getRefLocalizationMap('arguments.user'),
+                description: Lang.getRef('argDescs.user', Language.Default),
+                description_localizations: Lang.getRefLocalizationMap('argDescs.user'),
+                type: ApplicationCommandOptionType.User,
+                required: true,
+            },
+        ],
+    },
     DEV: {
         type: ApplicationCommandType.ChatInput,
         name: Lang.getRef('chatCommands.dev', Language.Default),
@@ -68,6 +88,34 @@ export const ChatCommandMetadata: {
         description_localizations: Lang.getRefLocalizationMap('commandDescs.test'),
         dm_permission: true,
         default_member_permissions: undefined,
+    },
+    SETTIME: {
+        type: ApplicationCommandType.ChatInput,
+        name: Lang.getRef('chatCommands.settime', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('chatCommands.settime'),
+        description:
+            Lang.getRef('commandDescs.settime', Language.Default) ?? 'Set a countdown timer',
+        description_localizations: Lang.getRefLocalizationMap('commandDescs.settime'),
+        dm_permission: true,
+        default_member_permissions: undefined,
+        options: [
+            {
+                name: 'duration',
+                description:
+                    Lang.getRef('argDescs.duration', Language.Default) || 'Duration string',
+                description_localizations: Lang.getRefLocalizationMap('argDescs.duration'),
+                type: ApplicationCommandOptionType.String,
+                required: true,
+            },
+            {
+                name: 'reason',
+                description:
+                    Lang.getRef('argDescs.reason', Language.Default) || 'Reason for the timer',
+                description_localizations: Lang.getRefLocalizationMap('argDescs.reason'),
+                type: ApplicationCommandOptionType.String,
+                required: false,
+            },
+        ],
     },
 };
 

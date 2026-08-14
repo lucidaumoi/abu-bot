@@ -169,6 +169,12 @@ export class CommandHandler implements EventHandler {
     }
 
     private async sendError(intr: CommandInteraction, data: EventData): Promise<void> {
+        // If the interaction was already deferred/replied elsewhere, don't try to respond again.
+        // That causes Discord to throw 40060: "Interaction has already been acknowledged."
+        if (intr.deferred || intr.replied) {
+            return;
+        }
+
         try {
             await InteractionUtils.send(
                 intr,

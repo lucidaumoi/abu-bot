@@ -32,12 +32,7 @@
                 "fields": [
                     {
                         "name": "Commands",
-                        "value": [
-                            "To see the available commands, just type `/` and select the bot from the left side. You can then scroll through all available commands. Some commands may be hidden if you don't have permission to view them.",
-                            "",
-                            "{{CMD_LINK_TEST}} - {{REF:commandDescs.test}}",
-                            "{{CMD_LINK_INFO}} - {{REF:commandDescs.info}}"
-                        ]
+                        "value": ["To chat with bot, **@{{COM:bot.name}} text**"]
                     },
                     {
                         "name": "Command Permissions",
@@ -53,6 +48,9 @@
             },
             "test": {
                 "description": "Test command works!"
+            },
+            "setTime": {
+                "description": "Set a countdown timer that will notify you when time elapses."
             },
             "viewDateJoined": {
                 "description": "{{TARGET}} joined on {{DATE}}!"
@@ -189,10 +187,12 @@
             "description": "{{REF:links.templateEmbed}} helps give developers a starting point for new Discord bots, so that much of the initial setup can be avoided and developers can instead focus on meaningful bot features."
         },
         "chatCommands": {
+            "avatar": "avatar",
             "dev": "dev",
             "help": "help",
             "info": "info",
-            "test": "test"
+            "test": "test",
+            "settime": "settime"
         },
         "userCommands": {
             "viewDateJoined": "View Date Joined"
@@ -202,18 +202,26 @@
         },
         "arguments": {
             "command": "command",
-            "option": "option"
+            "option": "option",
+            "user": "user",
+            "duration": "duration",
+            "reason": "reason"
         },
         "commandDescs": {
+            "avatar": "View a user's avatar.",
             "dev": "Developer use only.",
             "help": "Find help or contact support.",
             "info": "View bot info.",
-            "test": "Run the test command."
+            "test": "Run the test command.",
+            "settime": "Set a countdown timer that will notify you after the duration."
         },
         "argDescs": {
             "devCommand": "Command.",
             "helpOption": "Option.",
-            "infoOption": "Option."
+            "infoOption": "Option.",
+            "user": "User to inspect.",
+            "duration": "Duration string (e.g. 1h, 30m, 10s, 1h1m1s)",
+            "reason": "Reason or label for the timer"
         },
         "fields": {
             "commands": "Commands",
