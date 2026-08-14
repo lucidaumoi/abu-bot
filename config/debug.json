@@ -1,0 +1,12 @@
+{
+    "override": {
+        "shardMode": {
+            "enabled": false,
+            "value": "worker"
+        }
+    },
+    "dummyMode": {
+        "enabled": false,
+        "whitelist": ["888040353242972202", "1324002587355385887"]
+    }
+}
