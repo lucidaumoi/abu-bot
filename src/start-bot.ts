@@ -104,7 +104,7 @@ async function start(): Promise<void> {
     let triggers: Trigger[] = [
         new GeminiChatTrigger(
             new GeminiChatService(
-                Config.gemini?.apiKey ?? process.env.GEMINI_API_KEY,
+                process.env.GEMINI_API_KEY ?? Config.gemini?.apiKey,
                 Config.gemini?.model ?? 'gemini-2.5-flash'
             )
         ),
