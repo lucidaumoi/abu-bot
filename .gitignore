@@ -2,7 +2,6 @@ node_modules/
 dist/
 .env
 .env.local
-config/config.json
 .vscode/
 .DS_Store
 npm-debug.log
