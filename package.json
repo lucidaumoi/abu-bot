@@ -30,7 +30,7 @@
         "commands:rename": "npm run build && node --enable-source-maps dist/start-bot.js commands rename",
         "commands:delete": "npm run build && node --enable-source-maps dist/start-bot.js commands delete",
         "commands:clear": "npm run build && node --enable-source-maps dist/start-bot.js commands clear",
-        "start": "npm run start:bot",
+        "start": "node --enable-source-maps dist/start-bot.js",
         "start:bot": "npm run build && node --enable-source-maps dist/start-bot.js",
         "dev": "node watch.js",
         "start:manager": "npm run build && node --enable-source-maps dist/start-manager.js",

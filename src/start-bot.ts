@@ -40,6 +40,7 @@ import {
     Logger,
 } from './services/index.js';
 import { GeminiChatTrigger, Trigger } from './triggers/index.js';
+import { startWebServer } from './webserver.js';
 
 const require = createRequire(import.meta.url);
 let Config = require('../config/config.json');
@@ -48,6 +49,14 @@ let Logs = require('../lang/logs.json');
 async function start(): Promise<void> {
     // Services
     let eventDataService = new EventDataService();
+
+    // Start a lightweight HTTP server for health checks (Render / UptimeRobot)
+    try {
+        startWebServer();
+    } catch (err) {
+        // eslint-disable-next-line no-console
+        console.warn('Failed to start webserver', err);
+    }
 
     // Client
     let client = new CustomClient({
@@ -116,8 +125,10 @@ async function start(): Promise<void> {
     ];
 
     // Bot
+    const BOT_TOKEN = process.env.DISCORD_TOKEN ?? process.env.CLIENT_TOKEN ?? Config.client.token;
+
     let bot = new Bot(
-        Config.client.token,
+        BOT_TOKEN,
         client,
         guildJoinHandler,
         guildLeaveHandler,
@@ -131,7 +142,7 @@ async function start(): Promise<void> {
     // Register
     if (process.argv[2] == 'commands') {
         try {
-            let rest = new REST({ version: '10' }).setToken(Config.client.token);
+            let rest = new REST({ version: '10' }).setToken(BOT_TOKEN);
             let commandRegistrationService = new CommandRegistrationService(rest);
             let localCmds = [
                 ...Object.values(ChatCommandMetadata).sort((a, b) => (a.name > b.name ? 1 : -1)),
