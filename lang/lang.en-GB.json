@@ -32,7 +32,11 @@
                 "fields": [
                     {
                         "name": "Commands",
-                        "value": ["To chat with bot, **@{{COM:bot.name}} text**"]
+                        "value": [
+                            "To chat with bot, **@{{COM:bot.name}} text**",
+                            "`/settime <duration> [reason]` - Set a countdown timer and ping you when time's up.",
+                            "`/avatar <user>` - View a user's avatar in full resolution."
+                        ]
                     },
                     {
                         "name": "Command Permissions",
